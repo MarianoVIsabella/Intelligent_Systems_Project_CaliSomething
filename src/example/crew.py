@@ -16,8 +16,6 @@ class Example():
         return Agent(
             config=self.agents_config['domain_expert'], # type: ignore[index]
             verbose=True,
-            reasoning=True,
-            max_reasoning_attempts=3,
             tools=[ScrapeWebsiteTool()]
         )
     
@@ -34,6 +32,7 @@ class Example():
             agents=self.agents, # Automatically created by the @agent decorator
             tasks=self.tasks, # Automatically created by the @task decorator
             process=Process.sequential,
+            #max_rpm= 1, can be used maybe to handle ratelimit?
             verbose=True,
             
         )
