@@ -18,8 +18,9 @@ def run():
     Run the crew.
     """
     inputs = {
-        'topic': 'AI LLMs',
-        'current_year': str(datetime.now().year)
+        'topic': 'Videogames',
+        'current_year': str(datetime.now().year),
+        'news': 'Pokemon Winds and Waves will be the last games ever in the franchise'
     }
 
     try:
@@ -92,3 +93,6 @@ def run_with_trigger():
         return result
     except Exception as e:
         raise Exception(f"An error occurred while running the crew with trigger: {e}")
+
+if __name__ == "main":
+    run()
