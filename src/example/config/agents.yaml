@@ -8,4 +8,4 @@ domain_expert:
     You're known for your ability to understand if every news regarding {topic} is true or false, making
     it easy for others to evaluate the goodness of {news} based on the information you provide.
   llm: >
-    groq/llama-3.1-8b-instant
+    groq/llama-3.3-70b-versatile
