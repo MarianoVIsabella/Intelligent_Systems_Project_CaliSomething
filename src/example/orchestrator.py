@@ -1,5 +1,5 @@
 from crewai import Agent, Task, Crew, Process
-from shared_state import CategorizerOutput, ExpertOutput, FinalVerdictOutput
+from models.shared_state import CategorizerOutput, ExpertOutput, FinalVerdictOutput
 
 def run_debunking_crew(news_text: str):
     # --- AGENTI FINTI ---
