@@ -61,3 +61,13 @@ self_centered_verdict_task:
   <<: *verdict
   agent: self_centered_judge
   output_file: outputs/self_centered_verdict.md
+
+decision_task:
+  description: >
+    Collect the opinion of every judge, counting yes and no to provide the final decision on {news}
+  expected_output: >
+    The answer "TRUTH" or "FAKE" about {news}, explaining briefly which judge voted yes and which voted no
+    Formatted as markdown.
+  agent: decision_agent
+  markdown: True
+  output_file: outputs/final_sentence.md

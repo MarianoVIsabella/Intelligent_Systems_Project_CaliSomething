@@ -54,6 +54,14 @@ class Example():
     def self_centered_judge(self) -> Agent:
         return make_judge(self.agents_config['self_centered_judge'])
     
+    @agent
+    def decision_agent(self) -> Agent:
+        return Agent(
+            config=self.agents_config['decision_agent'], # type: ignore[index]
+            verbose=True,
+            llm=LLM(model=os.environ["MODEL"]),
+        )
+    
     @task
     def evaluate_task(self) -> Task:
         return Task(
@@ -88,6 +96,12 @@ class Example():
     def self_centered_verdict_task(self) -> Task:
         return Task(
             config=self.tasks_config['self_centered_verdict_task']
+        )
+    
+    @task
+    def decision_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['decision_task']
         )
 
     @crew
