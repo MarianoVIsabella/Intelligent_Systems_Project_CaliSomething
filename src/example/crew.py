@@ -28,6 +28,7 @@ class Example():
         return Agent(
             config=self.agents_config['judge'],
             verbose=True,
+            allow_delegation=True,
             llm=LLM(model=os.environ["MODEL"])
         )
     
@@ -50,7 +51,7 @@ class Example():
             agents=self.agents, # Automatically created by the @agent decorator
             tasks=self.tasks, # Automatically created by the @task decorator
             process=Process.sequential,
-            max_rpm= 2, #In this way we can handle ratelimit, try to increase at your own risk
+            max_rpm= 3, #In this way we can handle ratelimit, try to increase at your own risk
             verbose=True,
             
         )

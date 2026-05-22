@@ -1,14 +1,16 @@
 evaluate_task:
   description: >
     Evaluate {news} about {topic}. 
-    Make use of your tools to research on Google also any interesting and relevant information, given the current year is {current_year}.
+    Make use of your tools to research on Google also any RELEVANT information, given the current year is {current_year}.
+    If you can't find any RELEVANT information after your research, conclude that the information is unverifiable.
+    DON'T try to search news endlessly.
   expected_output: >
     The answer "yes" or "no" about the goodness of {news}, 
     coming with an explanation of why you think so, citing every website source (if any).
     Formatted as markdown.
   agent: domain_expert
   markdown: True
-  output_file: output.md
+  output_file: expert_review.md
 
 verdict_task:
   description: >
