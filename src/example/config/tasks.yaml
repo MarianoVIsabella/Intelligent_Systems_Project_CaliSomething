@@ -9,3 +9,16 @@ evaluate_task:
   agent: domain_expert
   markdown: True
   output_file: output.md
+
+verdict_task:
+  description: >
+    Decide if {news} is real or no.
+    Remember to consider the expert domain's opinion, but not base the decision 
+    only on it
+  expected_output: >
+    Your verdict "True" or "Fake" about {news}, 
+    coming with an explanation of why you think so.
+    Formatted as markdown.
+  agent: judge
+  markdown: True
+  output_file: verdict.md

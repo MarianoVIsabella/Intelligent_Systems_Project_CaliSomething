@@ -23,10 +23,24 @@ class Example():
             tools=[ScrapeWebsiteTool()]
         )
     
+    @agent
+    def judge(self) -> Agent:
+        return Agent(
+            config=self.agents_config['judge'],
+            verbose=True,
+            llm=LLM(model=os.environ["MODEL"])
+        )
+    
     @task
     def evaluate_task(self) -> Task:
         return Task(
             config=self.tasks_config['evaluate_task'], # type: ignore[index]
+        )
+    
+    @task
+    def verdict_task(self) ->Task:
+        return Task(
+            config=self.tasks_config['verdict_task'],
         )
 
     @crew
