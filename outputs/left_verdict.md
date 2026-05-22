@@ -1,10 +1,4 @@
-### Verdict
-#### True or Fake
-Pokemon Winds and Waves will be the last games ever in the franchise: **False** 
-#### Explanation
-The explanation for this verdict is based on several key points:
-- **Lack of Official Announcement**: No official statement has been found from reputable sources indicating the end of the Pokemon game franchise with Winds and Waves.
-- **Franchise's Ongoing Success**: The Pokemon franchise continues to be highly successful, with new products and games consistently being announced and released.
-- **Historical Context**: The franchise has a history of evolving and expanding, making it unlikely for it to conclude with a specific game title without a significant announcement.
-- **Expert Opinion**: The Videogames Expert's opinion that the statement is likely false, based on the franchise's history and trends in the videogame industry, supports this verdict.
-Therefore, based on the available information and analysis, the claim that Pokemon Winds and Waves will be the last games ever in the franchise is deemed false.
+# Verdict
+The claim that Pokemon Winds and Waves will be the last games ever in the franchise is: 
+## Fake
+The Pokemon franchise has a long history of releasing new games and updates, and there have been no official announcements or statements indicating that the series is coming to an end. The lack of credible evidence to support this claim, combined with the franchise's consistent pattern of innovation and adaptation, suggests that this claim is highly unlikely to be true. As a Left Wing Judge, I have considered the opinion of the Domain Expert and evaluated the claim based on verifiable evidence and credible sources, and I firmly believe that the claim is false.

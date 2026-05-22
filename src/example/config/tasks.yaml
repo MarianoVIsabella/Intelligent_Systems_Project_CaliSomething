@@ -39,3 +39,25 @@ right_wing_verdict_task:
   <<: *verdict
   agent: right_wing_judge
   output_file: outputs/right_verdict.md
+
+neutral_verdict_task:
+  description: >
+    Decide if {news} is real or no.
+    Remember to consider the expert domain's opinion, but to base the decision also on your opinion
+  <<: *verdict
+  agent: neutral_judge
+  output_file: outputs/neutral_verdict.md
+
+influenced_verdict_task:
+  description: >
+    Decide if {news} is real or no, based entirely on what the domain's expert says
+  <<: *verdict
+  agent: influenced_judge
+  output_file: outputs/influenced_verdict.md
+
+self_centered_verdict_task:
+  description: >
+    Decide if {news} is real or no, based entirely on what's your opinion on it.
+  <<: *verdict
+  agent: self_centered_judge
+  output_file: outputs/self_centered_verdict.md
