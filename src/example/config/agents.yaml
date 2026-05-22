@@ -23,5 +23,3 @@ judge:
     You're a serious judge, known to be among the best for fairness and competence.
     You're known also for your ability to reason on any news, using the domain expert opinion
     but also your own, so to decide if {news} is true or false
-  llm: >
-    %env(string):MODEL%

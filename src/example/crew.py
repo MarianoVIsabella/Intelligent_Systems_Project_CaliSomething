@@ -7,16 +7,22 @@ from dotenv import load_dotenv
 load_dotenv()
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
+def make_judge(config: dict) -> Agent:
+    """Judge Agents Factory"""
+
+    return Agent(
+        **config,
+        verbose=True,
+        llm=LLM(model=os.environ["MODEL"]),
+        allow_delegation=True,
+    )
+
 @CrewBase
 class Example():
 
     agents: list[BaseAgent]
     tasks: list[Task]
     agents_config="config/agents.yaml"
-
-    #N.B: Two models here, the agents needing to use tool will use a version of llama3
-    # finetuned for tool calling, whereas the other agents will use llama3.3 to enable
-    # better reasoning
 
     @agent
     def domain_expert(self) -> Agent:
@@ -25,17 +31,12 @@ class Example():
             verbose=True,
             llm=LLM(model=os.environ["MODEL"]),
             tools=[ScrapeWebsiteTool()],
-            max_iter=3
+            max_iter=3 #helps avoiding the online search fails, causing a global crash
         )
     
     @agent
     def judge(self) -> Agent:
-        return Agent(
-            config=self.agents_config['judge'],
-            verbose=True,
-            allow_delegation=True,
-            llm=LLM(model=os.environ["MODEL"])
-        )
+        return make_judge(self.agents_config['judge'])
     
     @task
     def evaluate_task(self) -> Task:
