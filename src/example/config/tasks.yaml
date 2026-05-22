@@ -10,7 +10,7 @@ evaluate_task:
     Formatted as markdown.
   agent: domain_expert
   markdown: True
-  output_file: expert_review.md
+  output_file: outputs/expert_review.md
 
 _verdict_task_common: &verdict
   expected_output: >
@@ -22,11 +22,20 @@ _verdict_task_common: &verdict
     coming with an explanation of why you think so.
     Formatted as markdown.
 
-verdict_task:
+left_wing_verdict_task:
   description: >
     Decide if {news} is real or no.
-    Remember to consider the expert domain's opinion, but not base the decision 
-    only on it
+    Remember to consider the expert domain's opinion, but to base the decision also on your
+    LEFT WING political views
   <<: *verdict
-  agent: judge
-  output_file: verdict.md
+  agent: left_wing_judge
+  output_file: outputs/left_verdict.md
+
+right_wing_verdict_task:
+  description: >
+    Decide if {news} is real or no.
+    Remember to consider the expert domain's opinion, but to base the decision also on your
+    RIGHT WING political views
+  <<: *verdict
+  agent: right_wing_judge
+  output_file: outputs/right_verdict.md

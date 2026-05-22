@@ -35,8 +35,12 @@ class Example():
         )
     
     @agent
-    def judge(self) -> Agent:
-        return make_judge(self.agents_config['judge'])
+    def left_wing_judge(self) -> Agent:
+        return make_judge(self.agents_config['left_wing_judge'])
+    
+    @agent
+    def right_wing_judge(self) -> Agent:
+        return make_judge(self.agents_config['right_wing_judge'])
     
     @task
     def evaluate_task(self) -> Task:
@@ -45,9 +49,15 @@ class Example():
         )
     
     @task
-    def verdict_task(self) ->Task:
+    def right_wing_verdict_task(self) -> Task:
         return Task(
-            config=self.tasks_config['verdict_task'],
+            config=self.tasks_config['right_wing_verdict_task'],
+        )
+    
+    @task
+    def left_wing_verdict_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['left_wing_verdict_task']
         )
 
     @crew
@@ -57,7 +67,7 @@ class Example():
             agents=self.agents, # Automatically created by the @agent decorator
             tasks=self.tasks, # Automatically created by the @task decorator
             process=Process.sequential,
-            max_rpm= 3, #In this way we can handle ratelimit, try to increase at your own risk
+            max_rpm= 10, #In this way we can handle ratelimit, try to increase at your own risk
             verbose=True,
             
         )
