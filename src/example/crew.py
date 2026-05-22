@@ -14,13 +14,18 @@ class Example():
     tasks: list[Task]
     agents_config="config/agents.yaml"
 
+    #N.B: Two models here, the agents needing to use tool will use a version of llama3
+    # finetuned for tool calling, whereas the other agents will use llama3.3 to enable
+    # better reasoning
+
     @agent
     def domain_expert(self) -> Agent:
         return Agent(
             config=self.agents_config['domain_expert'], # type: ignore[index]
             verbose=True,
             llm=LLM(model=os.environ["MODEL"]),
-            tools=[ScrapeWebsiteTool()]
+            tools=[ScrapeWebsiteTool()],
+            max_iter=3
         )
     
     @agent
