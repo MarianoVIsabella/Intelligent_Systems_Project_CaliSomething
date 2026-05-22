@@ -60,6 +60,7 @@ class Example():
             config=self.agents_config['decision_agent'], # type: ignore[index]
             verbose=True,
             llm=LLM(model=os.environ["MODEL"]),
+            allow_delegation=True
         )
     
     @task
