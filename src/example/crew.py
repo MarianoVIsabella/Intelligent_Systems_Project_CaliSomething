@@ -1,63 +1,96 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
-# If you want to run a snippet of code before or after the crew starts,
-# you can use the @before_kickoff and @after_kickoff decorators
-# https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
+
+# Structured outputs
+from models.shared_state import (
+    CategorizerOutput,
+    ExpertOutput,
+    FinalVerdictOutput
+)
 
 @CrewBase
-class Example():
-    """Example crew"""
+class FakeNewsCrew():
+    """Fake News Debunking Crew"""
 
     agents: list[BaseAgent]
     tasks: list[Task]
 
-    # Learn more about YAML configuration files here:
-    # Agents: https://docs.crewai.com/concepts/agents#yaml-configuration-recommended
-    # Tasks: https://docs.crewai.com/concepts/tasks#yaml-configuration-recommended
-    
-    # If you would like to add tools to your agents, you can learn more about it here:
-    # https://docs.crewai.com/concepts/agents#agent-tools
+    # =====================================================
+    # AGENTS
+    # =====================================================
+
     @agent
-    def researcher(self) -> Agent:
+    def categorizer_agent(self) -> Agent:
         return Agent(
-            config=self.agents_config['researcher'], # type: ignore[index]
+            config=self.agents_config['categorizer_agent'],
             verbose=True
         )
 
     @agent
-    def reporting_analyst(self) -> Agent:
+    def expert_agent(self) -> Agent:
         return Agent(
-            config=self.agents_config['reporting_analyst'], # type: ignore[index]
+            config=self.agents_config['expert_agent'],
             verbose=True
         )
 
-    # To learn more about structured task outputs,
-    # task dependencies, and task callbacks, check out the documentation:
-    # https://docs.crewai.com/concepts/tasks#overview-of-a-task
+    @agent
+    def conservative_judge(self) -> Agent:
+        return Agent(
+            config=self.agents_config['conservative_judge'],
+            verbose=True
+        )
+
+    @agent
+    def skeptical_judge(self) -> Agent:
+        return Agent(
+            config=self.agents_config['skeptical_judge'],
+            verbose=True
+        )
+
+    @agent
+    def neutral_judge(self) -> Agent:
+        return Agent(
+            config=self.agents_config['neutral_judge'],
+            verbose=True
+        )
+
+    # =====================================================
+    # TASKS
+    # =====================================================
+
     @task
-    def research_task(self) -> Task:
+    def categorization_task(self) -> Task:
         return Task(
-            config=self.tasks_config['research_task'], # type: ignore[index]
+            config=self.tasks_config['categorization_task'],
+            output_pydantic=CategorizerOutput
         )
 
     @task
-    def reporting_task(self) -> Task:
+    def expert_analysis_task(self) -> Task:
         return Task(
-            config=self.tasks_config['reporting_task'], # type: ignore[index]
-            output_file='report.md'
+            config=self.tasks_config['expert_analysis_task'],
+            output_pydantic=ExpertOutput
         )
+
+    @task
+    def judge_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['judge_task'],
+            output_pydantic=FinalVerdictOutput
+        )
+
+    # =====================================================
+    # CREW
+    # =====================================================
 
     @crew
     def crew(self) -> Crew:
-        """Creates the Example crew"""
-        # To learn how to add knowledge sources to your crew, check out the documentation:
-        # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
+        """Creates the Fake News Debunking Crew"""
 
         return Crew(
-            agents=self.agents, # Automatically created by the @agent decorator
-            tasks=self.tasks, # Automatically created by the @task decorator
+            agents=self.agents,
+            tasks=self.tasks,
             process=Process.sequential,
-            verbose=True,
-            # process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
+            verbose=True
         )

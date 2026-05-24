@@ -2,20 +2,21 @@
 import sys
 import warnings
 from datetime import datetime
+import logging
 
-# Replace 'example.crew' with actual project crew folder name if different
-from crew import Example 
+logging.basicConfig(level=logging.INFO)
+
+from crew import FakeNewsCrew 
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
-def run():
+def run(news_text: str):
     """ Run the crew normally from terminal """
     inputs = {
-        'topic': 'AI LLMs',
-        'current_year': str(datetime.now().year)
+        "news_text": news_text
     }
     try:
-        Example().crew().kickoff(inputs=inputs)
+        FakeNewsCrew().crew().kickoff(inputs=inputs)    
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}")
 
@@ -34,23 +35,22 @@ def run_from_streamlit(news_text: str):
     time.sleep(2) 
     
     # Return structured Pydantic mock data for your UI testing
-    return FinalVerdictOutput(
-        final_verdict="FAKE",
-        judge_votes=["FAKE", "REAL", "FAKE"],
-        reasoning="The submitted news lacks verification from credible primary sources. "
-                  "Statistical data cited within the text appears to be manipulated or fabricated."
-    )
+    return FakeNewsCrew().crew().kickoff(
+    inputs={
+        "news_text": news_text
+    }
+)
 
 def train():
     inputs = {"topic": "AI LLMs", 'current_year': str(datetime.now().year)}
     try:
-        Example().crew().train(n_iterations=int(sys.argv[1]), filename=sys.argv[2], inputs=inputs)
+        FakeNewsCrew().crew().train(n_iterations=int(sys.argv[1]), filename=sys.argv[2], inputs=inputs)
     except Exception as e:
         raise Exception(f"An error occurred while training the crew: {e}")
 
 def replay():
     try:
-        Example().crew().replay(task_id=sys.argv[1])
+        FakeNewsCrew().crew().replay(task_id=sys.argv[1])
     except Exception as e:
         raise Exception(f"An error occurred while replaying the crew: {e}")
 

@@ -1,0 +1,6 @@
+crewai
+streamlit
+pydantic
+transformers
+spacy
+duckduckgo-search
