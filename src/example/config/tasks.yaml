@@ -23,6 +23,8 @@ _verdict_task_common: &verdict
     Formatted as markdown.
 
 left_wing_verdict_task:
+  context:
+    - evaluate_task
   description: >
     Decide if {news} is real or no.
     Remember to consider the expert domain's opinion, but to base the decision also on your
@@ -32,6 +34,8 @@ left_wing_verdict_task:
   output_file: outputs/left_verdict.md
 
 right_wing_verdict_task:
+  context:
+    - evaluate_task
   description: >
     Decide if {news} is real or no.
     Remember to consider the expert domain's opinion, but to base the decision also on your
@@ -49,15 +53,19 @@ neutral_verdict_task:
   output_file: outputs/neutral_verdict.md
 
 influenced_verdict_task:
+  context:
+    - evaluate_task
   description: >
-    Decide if {news} is real or no, based entirely on what the domain's expert says
+    Decide if {news} is real or no, based entirely on what the domain's expert says.
   <<: *verdict
   agent: influenced_judge
   output_file: outputs/influenced_verdict.md
 
 self_centered_verdict_task:
+  context:
+    - evaluate_task
   description: >
-    Decide if {news} is real or no, based entirely on what's your opinion on it.
+    Decide if {news} is real or no, based entirely on what's your opinion on it. Ignore what the domain expert says.
   <<: *verdict
   agent: self_centered_judge
   output_file: outputs/self_centered_verdict.md
@@ -65,6 +73,9 @@ self_centered_verdict_task:
 decision_task:
   description: >
     Collect the opinion of every judge, counting yes and no to provide the final decision on {news}
+    The judges are: Left Wing Judge, Right Wing Judge, Neutral Judge, 
+    Influenced Judge, and Self Centered Judge.
+    DO NOT consider any other source as a judge.
   expected_output: >
     The answer "TRUTH" or "FAKE" about {news}, explaining briefly which judge voted yes and which voted no
     Formatted as markdown.
