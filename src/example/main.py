@@ -35,11 +35,18 @@ def run_from_streamlit(news_text: str):
     time.sleep(2) 
     
     # Return structured Pydantic mock data for your UI testing
-    return FakeNewsCrew().crew().kickoff(
-    inputs={
-        "news_text": news_text
-    }
-)
+    #return FakeNewsCrew().crew().kickoff( #parte da usare senza mock
+    #inputs={
+    #    "news_text": news_text
+    #}
+    #)
+
+    return FinalVerdictOutput(
+    final_verdict="FAKE",
+    judge_votes=["FAKE", "REAL", "FAKE"],
+    reasoning="..."
+    )
+
 
 def train():
     inputs = {"topic": "AI LLMs", 'current_year': str(datetime.now().year)}
