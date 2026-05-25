@@ -14,7 +14,7 @@ def make_judge(config: dict) -> Agent:
         **config,
         verbose=True,
         llm=LLM(model=os.environ["MODEL"]),
-        allow_delegation=True,
+        allow_delegation=False,
     )
 
 @CrewBase
@@ -60,7 +60,14 @@ class Example():
             config=self.agents_config['decision_agent'], # type: ignore[index]
             verbose=True,
             llm=LLM(model=os.environ["MODEL"]),
-            allow_delegation=True
+            context=[                            
+            self.left_wing_verdict_task(),
+            self.right_wing_verdict_task(),
+            self.neutral_verdict_task(),
+            self.influenced_verdict_task(),
+            self.self_centered_verdict_task(),
+        ],
+            allow_delegation=False
         )
     
     @task
@@ -112,7 +119,7 @@ class Example():
             agents=self.agents, # Automatically created by the @agent decorator
             tasks=self.tasks, # Automatically created by the @task decorator
             process=Process.sequential,
-            max_rpm= 1, #In this way we can handle ratelimit, try to increase at your own risk
+            max_rpm= 2, #In this way we can handle ratelimit, try to increase at your own risk
                         #UPPER BOUND: 5 (going above burns too much token)
             verbose=True,
             
