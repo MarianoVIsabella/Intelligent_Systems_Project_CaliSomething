@@ -65,7 +65,7 @@ class FakeNewsCrew():
             verbose=True,
             llm=LLM(model=os.environ["MODEL"]),
             tools=[ScrapeWebsiteTool()],
-            max_iter=3 #helps avoiding the online search fails, causing a global crash
+            max_iter=5 #helps avoiding the online search fails, causing a global crash
         )
     
     @agent
