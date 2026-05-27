@@ -37,26 +37,26 @@ class FakeNewsCrew():
     # AGENTS
     # =====================================================
 
-    @agent
-    def categorizer_agent(self) -> Agent:
-        return Agent(
-            config=self.agents_config['categorizer_agent'],
-            verbose=True
-        )
+    # @agent
+    # def categorizer_agent(self) -> Agent:
+    #     return Agent(
+    #         config=self.agents_config['categorizer_agent'],
+    #         verbose=True
+    #     )
 
-    @agent
-    def expert_agent(self) -> Agent:
-        return Agent(
-            config=self.agents_config['expert_agent'],
-            verbose=True
-        )
+    # @agent
+    # def expert_agent(self) -> Agent:
+    #     return Agent(
+    #         config=self.agents_config['expert_agent'],
+    #         verbose=True
+    #     )
 
-    @agent
-    def conservative_judge(self) -> Agent:
-        return Agent(
-            config=self.agents_config['conservative_judge'],
-            verbose=True
-        )
+    # @agent
+    # def conservative_judge(self) -> Agent:
+    #     return Agent(
+    #         config=self.agents_config['conservative_judge'],
+    #         verbose=True
+    #     )
 
     @agent
     def domain_expert(self) -> Agent:
@@ -110,17 +110,23 @@ class FakeNewsCrew():
             config=self.tasks_config['evaluate_task'], # type: ignore[index]
         )
     
-    @task
-    def expert_analysis_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['expert_analysis_task'],
-            output_pydantic=ExpertOutput
-        )
+    # @task
+    # def expert_analysis_task(self) -> Task:
+    #     return Task(
+    #         config=self.tasks_config['expert_analysis_task'],
+    #         output_pydantic=ExpertOutput
+    #     )
     
     @task
     def left_wing_verdict_task(self) -> Task:
         return Task(
             config=self.tasks_config['left_wing_verdict_task']
+        )
+    
+    @task
+    def right_wing_verdict_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['right_wing_verdict_task']
         )
 
     @task
@@ -144,7 +150,8 @@ class FakeNewsCrew():
     @task
     def decision_task(self) -> Task:
         return Task(
-            config=self.tasks_config['decision_task']
+            config=self.tasks_config['decision_task'],
+            output_pydantic=FinalVerdictOutput # 
         )
 
     # =====================================================

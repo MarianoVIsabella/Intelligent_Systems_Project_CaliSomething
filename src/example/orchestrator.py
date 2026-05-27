@@ -1,61 +1,28 @@
-from crewai import Agent, Task, Crew, Process
-from models.shared_state import CategorizerOutput, ExpertOutput, FinalVerdictOutput
+from crew import FakeNewsCrew
 
 def run_debunking_crew(news_text: str):
-    # --- AGENTI FINTI ---
-    categorizer = Agent(
-        role='Categorizer Finto',
-        goal='Restituisci sempre categorie fisse per testare il sistema.',
-        backstory='Sei un mock agent per i test.',
-        allow_delegation=False
-    )
-    
-    expert = Agent(
-        role='Esperto Finto',
-        goal='Genera un parere finto.',
-        backstory='Sei un mock agent per i test.',
-        allow_delegation=False
-    )
-    
-    judge_panel = Agent(
-        role='Giuria Finta',
-        goal='Restituisci sempre FAKE per i test.',
-        backstory='Sei un mock agent per i test.',
-        allow_delegation=False
-    )
+    """
+    Executes the real multi-agent crew debate and verification workflow.
+    No more mock agents used here.
+    """
+    # 1. Definiamo gli input che verranno interpolati nei file YAML (es: {news_text})
+    inputs = {
+        'news_text': news_text
+    }
 
-    # --- TASK FINTI (che forzano l'uso dei modelli Pydantic) ---
-    task_cat = Task(
-        description=f"Analizza la notizia: '{news_text}'. Ignorala e restituisci ['health', 'politics'].",
-        expected_output="Lista di categorie",
-        agent=categorizer,
-        output_pydantic=CategorizerOutput
-    )
-    
-    task_exp = Task(
-        description="Ricevi le categorie e la notizia. Genera un'opinione inventata.",
-        expected_output="Opinione dell'esperto",
-        agent=expert,
-        output_pydantic=ExpertOutput
-    )
-    
-    task_judge = Task(
-        description="Ricevi i dati precedenti. Genera un verdetto finale FAKE con finte motivazioni.",
-        expected_output="Verdetto finale strutturato",
-        agent=judge_panel,
-        output_pydantic=FinalVerdictOutput
-    )
+    try:
+        # 2. Inizializziamo la Crew reale usando la classe strutturata
+        fake_news_crew_instance = FakeNewsCrew()
+        real_crew = fake_news_crew_instance.crew()
+        
+        # 3. Avviamo il dibattito reale passando gli input
+        crew_result = real_crew.kickoff(inputs=inputs)
+        
+        # 4. Recuperiamo l'ultimo task eseguito (il decision_task)
+        # e ne estraiamo direttamente l'oggetto Pydantic validato
+        decision_task_object = real_crew.tasks[-1]
+        
+        return decision_task_object.output.pydantic
 
-    # --- ASSEMBLAGGIO CREW ---
-    crew = Crew(
-        agents=[categorizer, expert, judge_panel],
-        tasks=[task_cat, task_exp, task_judge],
-        process=Process.sequential,
-        verbose=True
-    )
-
-    # Eseguiamo la crew
-    crew_result = crew.kickoff()
-    
-    # Restituiamo l'output Pydantic dell'ultimo task
-    return task_judge.output.pydantic
+    except Exception as e:
+        raise Exception(f"Real Crew execution failed: {e}")
