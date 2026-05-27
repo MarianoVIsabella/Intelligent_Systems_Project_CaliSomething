@@ -1,17 +1,77 @@
-research_task:
+interface_task:
   description: >
-    Conduct a thorough research about {topic}
-    Make sure you find any interesting and relevant information given
-    the current year is {current_year}.
-  expected_output: >
-    A list with 10 bullet points of the most relevant information about {topic}
-  agent: researcher
+    Read the following news article:
 
-reporting_task:
-  description: >
-    Review the context you got and expand each topic into a full section for a report.
-    Make sure the report is detailed and contains any and all relevant information.
+    {news_text}
+
+    Extract:
+    1. Main claim
+    2. Short summary
+    3. Important statements that need verification
   expected_output: >
-    A fully fledged report with the main topics, each with a full section of information.
-    Formatted as markdown without '```'
-  agent: reporting_analyst
+    A structured summary of the news article with the main claim and check-worthy statements.
+  agent: interface_agent
+
+categorization_task:
+  description: >
+    Analyze the article summary and classify the article into one main category:
+    politics, health, science, economy, sports, technology, crime, entertainment, or general.
+
+    Also identify important keywords, named entities, and emotional tone.
+  expected_output: >
+    The article category, keywords, named entities, and sentiment/tone.
+  agent: categorizer_agent
+
+domain_expert_task:
+  description: >
+    Based on the category and article summary, explain the domain context.
+    Identify what type of sources or evidence would be needed to verify the claim.
+  expected_output: >
+    Domain-specific verification guidance and context.
+  agent: domain_expert_agent
+
+supporting_judge_task:
+  description: >
+    Evaluate the article from a supportive perspective.
+    Identify reasons why the article may be credible.
+    Mention what evidence would support it.
+  expected_output: >
+    A supporting argument about the article's credibility.
+  agent: supporting_judge_agent
+
+opposing_judge_task:
+  description: >
+    Evaluate the article from a skeptical perspective.
+    Identify possible signs of fake news, misinformation, exaggeration, missing context, or manipulation.
+  expected_output: >
+    An opposing argument about why the article may be false, misleading, or unreliable.
+  agent: opposing_judge_agent
+
+neutral_judge_task:
+  description: >
+    Compare the supporting and opposing perspectives.
+    Identify uncertainties, missing evidence, and the confidence level of the analysis.
+  expected_output: >
+    A balanced analysis of the debate with confidence level.
+  agent: neutral_judge_agent
+
+verdict_task:
+  description: >
+    Synthesize all previous outputs and produce a final fake news verdict.
+
+    Use one of these labels:
+    - Likely True
+    - Likely False
+    - Misleading
+    - Unverifiable
+    - Uncertain
+
+    Include:
+    1. Final label
+    2. Confidence score from 0 to 100
+    3. Main reasons
+    4. Warning signs
+    5. Recommended next verification step
+  expected_output: >
+    A clear final fake news detection report.
+  agent: verdict_agent

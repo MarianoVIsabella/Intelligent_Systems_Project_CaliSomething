@@ -1,63 +1,130 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from crewai.agents.agent_builder.base_agent import BaseAgent
-# If you want to run a snippet of code before or after the crew starts,
-# you can use the @before_kickoff and @after_kickoff decorators
-# https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
+from crewai_tools import SerperDevTool
+from example.tools.nlp_tools import NLPAnalysisTool
+from example.tools.classification_tool import NewsClassificationTool
 
 @CrewBase
-class Example():
-    """Example crew"""
+class FakeNewsDetector:
+    """Fake News Detector crew"""
 
-    agents: list[BaseAgent]
-    tasks: list[Task]
-
-    # Learn more about YAML configuration files here:
-    # Agents: https://docs.crewai.com/concepts/agents#yaml-configuration-recommended
-    # Tasks: https://docs.crewai.com/concepts/tasks#yaml-configuration-recommended
-    
-    # If you would like to add tools to your agents, you can learn more about it here:
-    # https://docs.crewai.com/concepts/agents#agent-tools
-    @agent
-    def researcher(self) -> Agent:
-        return Agent(
-            config=self.agents_config['researcher'], # type: ignore[index]
-            verbose=True
-        )
+    agents_config = "config/agents.yaml"
+    tasks_config = "config/tasks.yaml"
+    nlp_tool = NLPAnalysisTool()
+    classification_tool = NewsClassificationTool()
+    search_tool = SerperDevTool()
 
     @agent
-    def reporting_analyst(self) -> Agent:
+    def interface_agent(self) -> Agent:
         return Agent(
-            config=self.agents_config['reporting_analyst'], # type: ignore[index]
-            verbose=True
+            config=self.agents_config["interface_agent"],
+            verbose=True,
+            max_iter=2,
+            max_retry_limit=1,
+            respect_context_window=True,
         )
 
-    # To learn more about structured task outputs,
-    # task dependencies, and task callbacks, check out the documentation:
-    # https://docs.crewai.com/concepts/tasks#overview-of-a-task
-    @task
-    def research_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['research_task'], # type: ignore[index]
+    @agent
+    def categorizer_agent(self) -> Agent:
+        return Agent(
+            config=self.agents_config["categorizer_agent"],
+            tools=[self.nlp_tool, self.classification_tool],
+            verbose=True,
+            max_iter=2,
+            max_retry_limit=1,
+            respect_context_window=True,
+        )
+
+    @agent
+    def domain_expert_agent(self) -> Agent:
+        return Agent(
+            config=self.agents_config["domain_expert_agent"],
+            tools=[self.search_tool],
+            verbose=True,
+            max_iter=2,
+            max_retry_limit=1,
+            respect_context_window=True,
+        )
+
+    @agent
+    def supporting_judge_agent(self) -> Agent:
+        return Agent(
+            config=self.agents_config["supporting_judge_agent"],
+            tools=[self.search_tool],
+            verbose=True,
+            max_iter=2,
+            max_retry_limit=1,
+            respect_context_window=True,
+        )
+
+    @agent
+    def opposing_judge_agent(self) -> Agent:
+        return Agent(
+            config=self.agents_config["opposing_judge_agent"],
+            tools=[self.search_tool],
+            verbose=True,
+            max_iter=2,
+            max_retry_limit=1,
+            respect_context_window=True,
+        )
+
+    @agent
+    def neutral_judge_agent(self) -> Agent:
+        return Agent(
+            config=self.agents_config["neutral_judge_agent"],
+            tools=[self.search_tool],
+            verbose=True,
+            max_iter=2,
+            max_retry_limit=1,
+            respect_context_window=True,
+        )
+
+    @agent
+    def verdict_agent(self) -> Agent:
+        return Agent(
+            config=self.agents_config["verdict_agent"],
+            verbose=True,
+            max_iter=2,
+            max_retry_limit=1,
+            respect_context_window=True,
         )
 
     @task
-    def reporting_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['reporting_task'], # type: ignore[index]
-            output_file='report.md'
-        )
+    def interface_task(self) -> Task:
+        return Task(config=self.tasks_config["interface_task"])
+
+    @task
+    def categorization_task(self) -> Task:
+        return Task(config=self.tasks_config["categorization_task"])
+
+    @task
+    def domain_expert_task(self) -> Task:
+        return Task(config=self.tasks_config["domain_expert_task"])
+
+    @task
+    def supporting_judge_task(self) -> Task:
+        return Task(config=self.tasks_config["supporting_judge_task"])
+
+    @task
+    def opposing_judge_task(self) -> Task:
+        return Task(config=self.tasks_config["opposing_judge_task"])
+
+    @task
+    def neutral_judge_task(self) -> Task:
+        return Task(config=self.tasks_config["neutral_judge_task"])
+
+    @task
+    def verdict_task(self) -> Task:
+        return Task(config=self.tasks_config["verdict_task"])
 
     @crew
     def crew(self) -> Crew:
-        """Creates the Example crew"""
-        # To learn how to add knowledge sources to your crew, check out the documentation:
-        # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
-
+        """Creates the Fake News Detector crew"""
         return Crew(
-            agents=self.agents, # Automatically created by the @agent decorator
-            tasks=self.tasks, # Automatically created by the @task decorator
+            agents=self.agents,
+            tasks=self.tasks,
             process=Process.sequential,
             verbose=True,
-            # process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
+         #    max_rpm=4,
         )
+    

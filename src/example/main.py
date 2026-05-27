@@ -1,31 +1,38 @@
 #!/usr/bin/env python
 import sys
-import warnings
+from example.crew import FakeNewsDetector
 
-from datetime import datetime
-
-from example.crew import Example
-
-warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
-
-# This main file is intended to be a way for you to run your
-# crew locally, so refrain from adding unnecessary logic into this file.
-# Replace with inputs you want to test with, it will automatically
-# interpolate any tasks and agents information
 
 def run():
     """
-    Run the crew.
+    Run the Fake News Detector crew.
     """
+
+    print("\n=== Fake News Detector Crew ===")
+    print("Paste the news article or claim you want to verify.")
+    print("When finished, press ENTER twice.\n")
+
+    lines = []
+    while True:
+        line = input()
+        if line == "":
+            break
+        lines.append(line)
+
+    news_text = "\n".join(lines).strip()
+
+    if not news_text:
+        print("No news text provided.")
+        sys.exit(1)
+
     inputs = {
-        'topic': 'AI LLMs',
-        'current_year': str(datetime.now().year)
+        "news_text": news_text
     }
 
-    try:
-        Example().crew().kickoff(inputs=inputs)
-    except Exception as e:
-        raise Exception(f"An error occurred while running the crew: {e}")
+    result = FakeNewsDetector().crew().kickoff(inputs=inputs)
+
+    print("\n=== FINAL FAKE NEWS VERDICT ===\n")
+    print(result)
 
 
 def train():
@@ -33,62 +40,42 @@ def train():
     Train the crew for a given number of iterations.
     """
     inputs = {
-        "topic": "AI LLMs",
-        'current_year': str(datetime.now().year)
+        "news_text": "Sample news article for training."
     }
-    try:
-        Example().crew().train(n_iterations=int(sys.argv[1]), filename=sys.argv[2], inputs=inputs)
 
+    try:
+        FakeNewsDetector().crew().train(
+            n_iterations=int(sys.argv[1]),
+            filename=sys.argv[2],
+            inputs=inputs,
+        )
     except Exception as e:
         raise Exception(f"An error occurred while training the crew: {e}")
+
 
 def replay():
     """
     Replay the crew execution from a specific task.
     """
     try:
-        Example().crew().replay(task_id=sys.argv[1])
-
+        FakeNewsDetector().crew().replay(task_id=sys.argv[1])
     except Exception as e:
         raise Exception(f"An error occurred while replaying the crew: {e}")
 
+
 def test():
     """
-    Test the crew execution and returns the results.
+    Test the crew execution.
     """
     inputs = {
-        "topic": "AI LLMs",
-        "current_year": str(datetime.now().year)
+        "news_text": "A sample claim says that drinking coffee cures all diseases."
     }
 
     try:
-        Example().crew().test(n_iterations=int(sys.argv[1]), eval_llm=sys.argv[2], inputs=inputs)
-
+        FakeNewsDetector().crew().test(
+            n_iterations=int(sys.argv[1]),
+            eval_llm=sys.argv[2],
+            inputs=inputs,
+        )
     except Exception as e:
         raise Exception(f"An error occurred while testing the crew: {e}")
-
-def run_with_trigger():
-    """
-    Run the crew with trigger payload.
-    """
-    import json
-
-    if len(sys.argv) < 2:
-        raise Exception("No trigger payload provided. Please provide JSON payload as argument.")
-
-    try:
-        trigger_payload = json.loads(sys.argv[1])
-    except json.JSONDecodeError:
-        raise Exception("Invalid JSON payload provided as argument")
-
-    inputs = {
-        "crewai_trigger_payload": trigger_payload,
-        "topic": "",
-        "current_year": ""
-    }
-
-    try:
-        result = Example().crew().kickoff(inputs=inputs)
-        return result
-    except Exception as e:
-        raise Exception(f"An error occurred while running the crew with trigger: {e}")
