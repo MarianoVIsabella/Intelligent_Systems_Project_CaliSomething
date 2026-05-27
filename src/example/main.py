@@ -17,6 +17,7 @@ logging.basicConfig(level=logging.INFO)
 
 # Suppress specific warnings from dependencies
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
+warnings.filterwarnings("ignore", module="transformers")
 current_year=str(datetime.now().year)
 # =====================================================
 # TERMINAL EXECUTION

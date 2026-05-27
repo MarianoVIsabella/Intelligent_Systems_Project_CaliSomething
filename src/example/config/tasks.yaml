@@ -1,15 +1,16 @@
 categorization_task:
   description: >
-    Analyze the article summary and classify the article into one main category:
+    Analyze {news_text} summary and classify the article into one main category:
     politics, health, science, economy, sports, technology, crime, entertainment, or general.
 
     Also identify important keywords, named entities, and emotional tone.
   expected_output: >
     The article category, keywords, named entities, and sentiment/tone.
   agent: categorizer_agent
+  
 evaluate_task:
   description: >
-    Evaluate {news_text} about a certain topic. 
+    Evaluate {news_text} about a certain topic, given as output by the Categorizer. 
     Make use of your tools to research on Google also any RELEVANT information, given the current year is {current_year}.
     If you can't find any RELEVANT information after your research, conclude that the information is unverifiable.
     DON'T try to search news endlessly.
