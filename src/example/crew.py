@@ -81,7 +81,7 @@ class FakeNewsCrew():
                 verbose=True,
                 llm=LLM(model=os.environ["MODEL"]),
                 tools=[ScrapeWebsiteTool()],
-                max_iter=5 #helps avoiding the online search fails, causing a global crash
+                max_iter=3 #helps avoiding the online search fails, causing a global crash
             )
         
     @agent
@@ -121,6 +121,10 @@ class FakeNewsCrew():
             )
         
     @task
+    def categorization_task(self) -> Task:
+            return Task(config=self.tasks_config["categorization_task"])
+    
+    @task
     def evaluate_task(self) -> Task:
             return Task(
                 config=self.tasks_config['evaluate_task'], # type: ignore[index]
@@ -132,9 +136,7 @@ class FakeNewsCrew():
         #         config=self.tasks_config['expert_analysis_task'],
         #         output_pydantic=ExpertOutput
         #     )
-    @task
-    def categorization_task(self) -> Task:
-            return Task(config=self.tasks_config["categorization_task"])
+    
 
     @task
     def left_wing_verdict_task(self) -> Task:
@@ -185,7 +187,7 @@ class FakeNewsCrew():
                 agents=self.agents,
                 tasks=self.tasks,
                 process=Process.sequential,
-                max_rpm= 2, #In this way we can handle ratelimit, try to increase at your own risk
+                max_rpm= 3, #In this way we can handle ratelimit, try to increase at your own risk
                             #UPPER BOUND: 5 (going above burns too much token)
                 verbose=True,
             )
