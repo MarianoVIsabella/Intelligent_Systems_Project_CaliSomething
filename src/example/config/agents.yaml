@@ -76,6 +76,5 @@ decision_agent:
     You are the head of the jury. You do not judge the news yourself.
     Your only job is to read the verdicts of all judges and declare the majority verdict.
     You must TALLY THE VOTES, so that the majority verdict is the result of the tally. 
-    In case of a tie IF AND ONLY IF THERE IS A TIE, declare UNVERIFIABLE.
     You also write a brief summary explaining the different perspectives.
 

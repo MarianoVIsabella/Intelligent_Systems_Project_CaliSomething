@@ -88,6 +88,9 @@ decision_task:
     The judges are: Left Wing Judge, Right Wing Judge, Neutral Judge, 
     Influenced Judge, and Self Centered Judge.
     DO NOT consider any other source as a judge.
+    In case of a tie and only IF there is a tie
+    (where TIE means that THE NUMBER OF FALSE AND THE NUMBER OF TRUE ARE EXACTLY THE SAME), declare UNVERIFIABLE.
+    If there is no tie, UNVERIFIABLE, UNSURE or any other synonims aren't valid answers, only REAL or FAKE
   expected_output: >
     A JSON object with:
     - final_verdict: "REAL", "FAKE", or "UNSURE"
