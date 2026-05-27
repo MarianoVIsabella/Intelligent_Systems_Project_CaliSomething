@@ -1,3 +1,13 @@
+categorizer_agent:
+  role: >
+    News Categorizer
+
+  goal: >
+    Analyze the news and determine the categories involved.
+
+  backstory: >
+    You are an NLP expert specialized in detecting domains and topics in news articles.
+  
 domain_expert:
   role: >
     {topic} Expert

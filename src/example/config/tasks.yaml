@@ -1,3 +1,14 @@
+categorization_task:
+  description: >
+    Analyze the following news:
+    
+    {news_text}
+
+    Determine the categories involved in the news.
+
+  expected_output: >
+    A JSON object containing a list of categories.
+
 evaluate_task:
   description: >
     Evaluate {news} about {topic}. 

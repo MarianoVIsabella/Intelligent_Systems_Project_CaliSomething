@@ -1,5 +1,5 @@
 import streamlit as st
-from main import run_from_streamlit
+from main import run_from_streamlit, run_real_crew
 
 # =====================================================
 # PAGE CONFIGURATION
@@ -96,7 +96,7 @@ if st.button("🚀 Start Analysis", type="primary"):
             try:
 
                 # Call orchestrator function
-                result = run_from_streamlit(news_input)
+                result = run_real_crew(news_input)
 
                 st.success("✅ Analysis Completed!")
 

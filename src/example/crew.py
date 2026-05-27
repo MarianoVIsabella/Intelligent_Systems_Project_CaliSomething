@@ -162,6 +162,4 @@ class FakeNewsCrew():
             max_rpm= 2, #In this way we can handle ratelimit, try to increase at your own risk
                         #UPPER BOUND: 5 (going above burns too much token)
             verbose=True,
-            
-            verbose=True
         )
