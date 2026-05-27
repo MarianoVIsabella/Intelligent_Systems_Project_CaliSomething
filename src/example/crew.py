@@ -1,6 +1,13 @@
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
+
+# Structured outputs
+from models.shared_state import (
+    CategorizerOutput,
+    ExpertOutput,
+    FinalVerdictOutput
+)
 from crewai_tools import ScrapeWebsiteTool
 import os
 from dotenv import load_dotenv
@@ -18,11 +25,38 @@ def make_judge(config: dict) -> Agent:
     )
 
 @CrewBase
-class Example():
+class FakeNewsCrew():
+    """Fake News Debunking Crew"""
 
     agents: list[BaseAgent]
     tasks: list[Task]
     agents_config="config/agents.yaml"
+
+
+    # =====================================================
+    # AGENTS
+    # =====================================================
+
+    @agent
+    def categorizer_agent(self) -> Agent:
+        return Agent(
+            config=self.agents_config['categorizer_agent'],
+            verbose=True
+        )
+
+    @agent
+    def expert_agent(self) -> Agent:
+        return Agent(
+            config=self.agents_config['expert_agent'],
+            verbose=True
+        )
+
+    @agent
+    def conservative_judge(self) -> Agent:
+        return Agent(
+            config=self.agents_config['conservative_judge'],
+            verbose=True
+        )
 
     @agent
     def domain_expert(self) -> Agent:
@@ -77,9 +111,10 @@ class Example():
         )
     
     @task
-    def right_wing_verdict_task(self) -> Task:
+    def expert_analysis_task(self) -> Task:
         return Task(
-            config=self.tasks_config['right_wing_verdict_task'],
+            config=self.tasks_config['expert_analysis_task'],
+            output_pydantic=ExpertOutput
         )
     
     @task
@@ -112,15 +147,21 @@ class Example():
             config=self.tasks_config['decision_task']
         )
 
+    # =====================================================
+    # CREW
+    # =====================================================
+
     @crew
     def crew(self) -> Crew:
+        """Creates the Fake News Debunking Crew"""
 
         return Crew(
-            agents=self.agents, # Automatically created by the @agent decorator
-            tasks=self.tasks, # Automatically created by the @task decorator
+            agents=self.agents,
+            tasks=self.tasks,
             process=Process.sequential,
             max_rpm= 2, #In this way we can handle ratelimit, try to increase at your own risk
                         #UPPER BOUND: 5 (going above burns too much token)
             verbose=True,
             
+            verbose=True
         )

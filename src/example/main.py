@@ -1,98 +1,167 @@
 #!/usr/bin/env python
+
 import sys
 import warnings
+import logging
+import time
 
-from datetime import datetime
+from crew import FakeNewsCrew
+from models.shared_state import FinalVerdictOutput
 
-from example.crew import Example
+# =====================================================
+# LOGGING CONFIGURATION
+# =====================================================
 
+logging.basicConfig(level=logging.INFO)
+
+# Suppress specific warnings from dependencies
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
-# This main file is intended to be a way for you to run your
-# crew locally, so refrain from adding unnecessary logic into this file.
-# Replace with inputs you want to test with, it will automatically
-# interpolate any tasks and agents information
+# =====================================================
+# TERMINAL EXECUTION
+# =====================================================
 
-def run():
+def run(news_text: str):
     """
-    Run the crew.
+    Run the real CrewAI pipeline from terminal.
     """
+
+    logging.info("Starting fake news analysis from terminal")
+
     inputs = {
-        'topic': 'Videogames',
-        'current_year': str(datetime.now().year),
-        'news': 'Pokemon Winds and Waves will be the last games ever in the franchise'
+        "news_text": news_text
     }
 
     try:
-        Example().crew().kickoff(inputs=inputs)
-    except Exception as e:
-        raise Exception(f"An error occurred while running the crew: {e}")
 
+        return FakeNewsCrew().crew().kickoff(
+            inputs=inputs
+        )
+
+    except Exception as e:
+
+        raise Exception(
+            f"An error occurred while running the crew: {e}"
+        )
+
+# =====================================================
+# STREAMLIT MOCK MODE
+# =====================================================
+
+def run_from_streamlit(news_text: str):
+    """
+    Temporary mock mode used while
+    other team members complete their agents.
+
+    Later replace this mock return with:
+
+    return FakeNewsCrew().crew().kickoff(
+        inputs={
+            "news_text": news_text
+        }
+    )
+    """
+
+    logging.info("Received news from Streamlit UI")
+
+    # Simulate multi-agent discussion delay
+    time.sleep(2)
+
+    # MOCK OUTPUT FOR UI DEVELOPMENT
+    return FinalVerdictOutput(
+        final_verdict="FAKE",
+
+        judge_votes=[
+            "FAKE",
+            "REAL",
+            "FAKE"
+        ],
+
+        reasoning=(
+            "The submitted news lacks confirmation "
+            "from trusted sources and contains suspicious claims."
+        )
+    )
+
+# =====================================================
+# REAL STREAMLIT EXECUTION (FUTURE INTEGRATION)
+# =====================================================
+
+def run_real_crew(news_text: str):
+    """
+    Real CrewAI execution for future integration.
+    """
+
+    logging.info("Running real CrewAI pipeline")
+
+    return FakeNewsCrew().crew().kickoff(
+        inputs={
+            "news_text": news_text
+        }
+    )
+
+# =====================================================
+# CREW TRAINING
+# =====================================================
 
 def train():
-    """
-    Train the crew for a given number of iterations.
-    """
+
     inputs = {
-        "topic": "AI LLMs",
-        'current_year': str(datetime.now().year)
+        "news_text": "Sample fake news for training"
     }
+
     try:
-        Example().crew().train(n_iterations=int(sys.argv[1]), filename=sys.argv[2], inputs=inputs)
+
+        FakeNewsCrew().crew().train(
+            n_iterations=int(sys.argv[1]),
+            filename=sys.argv[2],
+            inputs=inputs
+        )
 
     except Exception as e:
-        raise Exception(f"An error occurred while training the crew: {e}")
+
+        raise Exception(
+            f"An error occurred while training the crew: {e}"
+        )
+
+# =====================================================
+# CREW REPLAY
+# =====================================================
 
 def replay():
-    """
-    Replay the crew execution from a specific task.
-    """
+
     try:
-        Example().crew().replay(task_id=sys.argv[1])
+
+        FakeNewsCrew().crew().replay(
+            task_id=sys.argv[1]
+        )
 
     except Exception as e:
-        raise Exception(f"An error occurred while replaying the crew: {e}")
+
+        raise Exception(
+            f"An error occurred while replaying the crew: {e}"
+        )
+
+# =====================================================
+# CREW TESTING
+# =====================================================
 
 def test():
-    """
-    Test the crew execution and returns the results.
-    """
+
     inputs = {
-        "topic": "AI LLMs",
-        "current_year": str(datetime.now().year)
+        "news_text": "Sample fake news for testing"
     }
 
     try:
-        Example().crew().test(n_iterations=int(sys.argv[1]), eval_llm=sys.argv[2], inputs=inputs)
+
+        FakeNewsCrew().crew().test(
+            n_iterations=int(sys.argv[1]),
+            eval_llm=sys.argv[2],
+            inputs=inputs
+        )
 
     except Exception as e:
-        raise Exception(f"An error occurred while testing the crew: {e}")
 
-def run_with_trigger():
-    """
-    Run the crew with trigger payload.
-    """
-    import json
-
-    if len(sys.argv) < 2:
-        raise Exception("No trigger payload provided. Please provide JSON payload as argument.")
-
-    try:
-        trigger_payload = json.loads(sys.argv[1])
-    except json.JSONDecodeError:
-        raise Exception("Invalid JSON payload provided as argument")
-
-    inputs = {
-        "crewai_trigger_payload": trigger_payload,
-        "topic": "",
-        "current_year": ""
-    }
-
-    try:
-        result = Example().crew().kickoff(inputs=inputs)
-        return result
-    except Exception as e:
-        raise Exception(f"An error occurred while running the crew with trigger: {e}")
-
-if __name__ == "main":
-    run()
+        raise Exception(
+            f"An error occurred while testing the crew: {e}"
+        )
