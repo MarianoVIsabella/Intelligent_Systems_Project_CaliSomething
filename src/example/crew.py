@@ -1,5 +1,8 @@
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
+from crewai_tools import SerperDevTool
+from example.tools.nlp_tools import NLPAnalysisTool
+from example.tools.classification_tool import NewsClassificationTool
 from crewai.agents.agent_builder.base_agent import BaseAgent
 
 # Structured outputs
@@ -31,7 +34,8 @@ class FakeNewsCrew():
     agents: list[BaseAgent]
     tasks: list[Task]
     agents_config="config/agents.yaml"
-
+    nlp_tool = NLPAnalysisTool()
+    classification_tool = NewsClassificationTool()
 
     # =====================================================
     # AGENTS
@@ -58,8 +62,19 @@ class FakeNewsCrew():
     #         verbose=True
     #     )
 
-    @agent
-    def domain_expert(self) -> Agent:
+@agent
+def categorizer_agent(self) -> Agent:
+        return Agent(
+            config=self.agents_config["categorizer_agent"],
+            tools=[self.nlp_tool, self.classification_tool],
+            verbose=True,
+            max_iter=2,
+            max_retry_limit=1,
+            respect_context_window=True,
+        )
+
+@agent
+def domain_expert(self) -> Agent:
         return Agent(
             config=self.agents_config['domain_expert'], # type: ignore[index]
             verbose=True,
@@ -163,6 +178,8 @@ class FakeNewsCrew():
         """Creates the Fake News Debunking Crew"""
 
         return Crew(
+            agents=self.agents,
+            tasks=self.tasks,
             agents=self.agents,
             tasks=self.tasks,
             process=Process.sequential,

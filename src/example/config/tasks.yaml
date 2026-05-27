@@ -1,14 +1,12 @@
 categorization_task:
   description: >
-    Analyze the following news:
-    
-    {news_text}
+    Analyze the article summary and classify the article into one main category:
+    politics, health, science, economy, sports, technology, crime, entertainment, or general.
 
-    Determine the categories involved in the news.
-
+    Also identify important keywords, named entities, and emotional tone.
   expected_output: >
-    A JSON object containing a list of categories.
-
+    The article category, keywords, named entities, and sentiment/tone.
+  agent: categorizer_agent
 evaluate_task:
   description: >
     Evaluate {news_text} about a certain topic. 

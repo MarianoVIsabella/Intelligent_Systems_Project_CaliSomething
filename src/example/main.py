@@ -102,6 +102,7 @@ def train():
         'current_year': current_year,
     }
 
+
     try:
 
         FakeNewsCrew().crew().train(
