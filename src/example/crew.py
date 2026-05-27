@@ -83,28 +83,28 @@ def domain_expert(self) -> Agent:
             max_iter=5 #helps avoiding the online search fails, causing a global crash
         )
     
-    @agent
-    def left_wing_judge(self) -> Agent:
+@agent
+def left_wing_judge(self) -> Agent:
         return make_judge(self.agents_config['left_wing_judge'])
     
-    @agent
-    def right_wing_judge(self) -> Agent:
+@agent
+def right_wing_judge(self) -> Agent:
         return make_judge(self.agents_config['right_wing_judge'])
 
-    @agent
-    def neutral_judge(self) -> Agent:
+@agent
+def neutral_judge(self) -> Agent:
         return make_judge(self.agents_config['neutral_judge'])
     
-    @agent
-    def influenced_judge(self) -> Agent:
+@agent
+def influenced_judge(self) -> Agent:
         return make_judge(self.agents_config['influenced_judge'])
     
-    @agent
-    def self_centered_judge(self) -> Agent:
+@agent
+def self_centered_judge(self) -> Agent:
         return make_judge(self.agents_config['self_centered_judge'])
     
-    @agent
-    def decision_agent(self) -> Agent:
+@agent
+def decision_agent(self) -> Agent:
         return Agent(
             config=self.agents_config['decision_agent'], # type: ignore[index]
             verbose=True,
@@ -119,8 +119,8 @@ def domain_expert(self) -> Agent:
             allow_delegation=False
         )
     
-    @task
-    def evaluate_task(self) -> Task:
+@task
+def evaluate_task(self) -> Task:
         return Task(
             config=self.tasks_config['evaluate_task'], # type: ignore[index]
         )
@@ -132,38 +132,38 @@ def domain_expert(self) -> Agent:
     #         output_pydantic=ExpertOutput
     #     )
     
-    @task
-    def left_wing_verdict_task(self) -> Task:
+@task
+def left_wing_verdict_task(self) -> Task:
         return Task(
             config=self.tasks_config['left_wing_verdict_task']
         )
     
-    @task
-    def right_wing_verdict_task(self) -> Task:
+@task
+def right_wing_verdict_task(self) -> Task:
         return Task(
             config=self.tasks_config['right_wing_verdict_task']
         )
 
-    @task
-    def neutral_verdict_task(self) -> Task:
+@task
+def neutral_verdict_task(self) -> Task:
         return Task(
             config=self.tasks_config['neutral_verdict_task']
         )
 
-    @task
-    def influenced_verdict_task(self) -> Task:
+@task
+def influenced_verdict_task(self) -> Task:
         return Task(
             config=self.tasks_config['influenced_verdict_task']
         )
 
-    @task
-    def self_centered_verdict_task(self) -> Task:
+@task
+def self_centered_verdict_task(self) -> Task:
         return Task(
             config=self.tasks_config['self_centered_verdict_task']
         )
     
-    @task
-    def decision_task(self) -> Task:
+@task
+def decision_task(self) -> Task:
         return Task(
             config=self.tasks_config['decision_task'],
             output_pydantic=FinalVerdictOutput, 
@@ -173,8 +173,8 @@ def domain_expert(self) -> Agent:
     # CREW
     # =====================================================
 
-    @crew
-    def crew(self) -> Crew:
+@crew
+def crew(self) -> Crew:
         """Creates the Fake News Debunking Crew"""
 
         return Crew(
