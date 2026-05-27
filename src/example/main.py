@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from datetime import datetime
 import sys
 import warnings
 import logging
@@ -29,7 +30,8 @@ def run(news_text: str):
     logging.info("Starting fake news analysis from terminal")
 
     inputs = {
-        "news_text": news_text
+        "news_text": news_text,
+        'current_year': str(datetime.now().year),
     }
 
     try:
@@ -96,7 +98,8 @@ def run_real_crew(news_text: str):
 
     return FakeNewsCrew().crew().kickoff(
         inputs={
-            "news_text": news_text
+            "news_text": news_text,
+            'current_year': str(datetime.now().year)
         }
     )
 

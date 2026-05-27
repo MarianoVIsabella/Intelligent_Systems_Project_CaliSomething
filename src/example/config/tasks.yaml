@@ -11,12 +11,12 @@ categorization_task:
 
 evaluate_task:
   description: >
-    Evaluate {news} about {topic}. 
+    Evaluate {news_text} about a certain topic. 
     Make use of your tools to research on Google also any RELEVANT information, given the current year is {current_year}.
     If you can't find any RELEVANT information after your research, conclude that the information is unverifiable.
     DON'T try to search news endlessly.
   expected_output: >
-    The answer "yes" or "no" about the goodness of {news}, 
+    The answer "yes" or "no" about the goodness of {news_text}, 
     coming with an explanation of why you think so, citing every website source (if any).
     Formatted as markdown.
   agent: domain_expert
@@ -25,11 +25,11 @@ evaluate_task:
 
 _verdict_task_common: &verdict
   expected_output: >
-    Your verdict "True" or "Fake" about {news}, 
+    Your verdict "True" or "Fake" about {news_text}, 
     coming with an explanation of why you think so.
     Formatted as markdown.
   expected_output: >
-    Your verdict "True" or "Fake" about {news}, 
+    Your verdict "True" or "Fake" about {news_text}, 
     coming with an explanation of why you think so.
     Formatted as markdown.
 
@@ -37,7 +37,7 @@ left_wing_verdict_task:
   context:
     - evaluate_task
   description: >
-    Decide if {news} is real or no.
+    Decide if {news_text} is real or no.
     Remember to consider the expert domain's opinion, but to base the decision also on your
     LEFT WING political views
   <<: *verdict
@@ -48,7 +48,7 @@ right_wing_verdict_task:
   context:
     - evaluate_task
   description: >
-    Decide if {news} is real or no.
+    Decide if {news_text} is real or no.
     Remember to consider the expert domain's opinion, but to base the decision also on your
     RIGHT WING political views
   <<: *verdict
@@ -57,7 +57,7 @@ right_wing_verdict_task:
 
 neutral_verdict_task:
   description: >
-    Decide if {news} is real or no.
+    Decide if {news_text} is real or no.
     Remember to consider the expert domain's opinion, but to base the decision also on your opinion
   <<: *verdict
   agent: neutral_judge
@@ -67,7 +67,7 @@ influenced_verdict_task:
   context:
     - evaluate_task
   description: >
-    Decide if {news} is real or no, based entirely on what the domain's expert says.
+    Decide if {news_text} is real or no, based entirely on what the domain's expert says.
   <<: *verdict
   agent: influenced_judge
   output_file: outputs/influenced_verdict.md
@@ -76,19 +76,19 @@ self_centered_verdict_task:
   context:
     - evaluate_task
   description: >
-    Decide if {news} is real or no, based entirely on what's your opinion on it. Ignore what the domain expert says.
+    Decide if {news_text} is real or no, based entirely on what's your opinion on it. Ignore what the domain expert says.
   <<: *verdict
   agent: self_centered_judge
   output_file: outputs/self_centered_verdict.md
 
 decision_task:
   description: >
-    Collect the opinion of every judge, counting yes and no to provide the final decision on {news}
+    Collect the opinion of every judge, counting yes and no to provide the final decision on {news_text}
     The judges are: Left Wing Judge, Right Wing Judge, Neutral Judge, 
     Influenced Judge, and Self Centered Judge.
     DO NOT consider any other source as a judge.
   expected_output: >
-    The answer "TRUTH" or "FAKE" about {news}, explaining briefly which judge voted yes and which voted no
+    The answer "TRUTH" or "FAKE" about {news_text}, explaining briefly which judge voted yes and which voted no
     Formatted as markdown.
   agent: decision_agent
   markdown: True
