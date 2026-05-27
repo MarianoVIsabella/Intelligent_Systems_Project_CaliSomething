@@ -151,7 +151,7 @@ class FakeNewsCrew():
     def decision_task(self) -> Task:
         return Task(
             config=self.tasks_config['decision_task'],
-            output_pydantic=FinalVerdictOutput # 
+            output_pydantic=FinalVerdictOutput, 
         )
 
     # =====================================================

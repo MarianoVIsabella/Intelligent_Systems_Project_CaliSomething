@@ -88,8 +88,10 @@ decision_task:
     Influenced Judge, and Self Centered Judge.
     DO NOT consider any other source as a judge.
   expected_output: >
-    The answer "TRUTH" or "FAKE" about {news_text}, explaining briefly which judge voted yes and which voted no
-    Formatted as markdown.
+    A JSON object with:
+    - final_verdict: "REAL", "FAKE", or "UNSURE"
+    - judge_votes: a list of strings, one per judge (e.g. ["REAL", "FAKE", "REAL", "FAKE", "FAKE"])
+    - reasoning: a brief explanation of which judge voted what and why
   agent: decision_agent
   markdown: True
   output_file: outputs/final_sentence.md

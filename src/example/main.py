@@ -17,34 +17,25 @@ logging.basicConfig(level=logging.INFO)
 
 # Suppress specific warnings from dependencies
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
-
+current_year=str(datetime.now().year)
 # =====================================================
 # TERMINAL EXECUTION
 # =====================================================
 
-def run(news_text: str):
-    """
-    Run the real CrewAI pipeline from terminal.
-    """
-
+def run(news_text: str) -> FinalVerdictOutput:
     logging.info("Starting fake news analysis from terminal")
-
-    inputs = {
-        "news_text": news_text,
-        'current_year': str(datetime.now().year),
-    }
-
     try:
-
-        return FakeNewsCrew().crew().kickoff(
-            inputs=inputs
+        result = FakeNewsCrew().crew().kickoff(
+            inputs={
+                "news_text": news_text,
+                "current_year": current_year,
+            }
         )
-
+        if isinstance(result.pydantic, FinalVerdictOutput):
+            return result.pydantic
+        raise ValueError(f"Output inatteso: {result.pydantic}")
     except Exception as e:
-
-        raise Exception(
-            f"An error occurred while running the crew: {e}"
-        )
+        raise Exception(f"An error occurred while running the crew: {e}")
 
 # =====================================================
 # STREAMLIT MOCK MODE
@@ -88,20 +79,17 @@ def run_from_streamlit(news_text: str):
 # =====================================================
 # REAL STREAMLIT EXECUTION (FUTURE INTEGRATION)
 # =====================================================
-
-def run_real_crew(news_text: str):
-    """
-    Real CrewAI execution for future integration.
-    """
-
+def run_real_crew(news_text: str) -> FinalVerdictOutput:
     logging.info("Running real CrewAI pipeline")
-
-    return FakeNewsCrew().crew().kickoff(
+    result = FakeNewsCrew().crew().kickoff(
         inputs={
             "news_text": news_text,
-            'current_year': str(datetime.now().year)
+            "current_year": current_year,
         }
     )
+    if isinstance(result.pydantic, FinalVerdictOutput):
+        return result.pydantic
+    raise ValueError(f"Output inatteso: {result.pydantic}")
 
 # =====================================================
 # CREW TRAINING
@@ -110,7 +98,8 @@ def run_real_crew(news_text: str):
 def train():
 
     inputs = {
-        "news_text": "Sample fake news for training"
+        "news_text": "Sample fake news for training",
+        'current_year': current_year,
     }
 
     try:
@@ -152,7 +141,8 @@ def replay():
 def test():
 
     inputs = {
-        "news_text": "Sample fake news for testing"
+        "news_text": "Sample fake news for testing",
+        'current_year': current_year,
     }
 
     try:
