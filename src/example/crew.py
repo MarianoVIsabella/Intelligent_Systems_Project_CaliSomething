@@ -1,14 +1,11 @@
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
-from crewai_tools import SerperDevTool
 from example.tools.nlp_tools import NLPAnalysisTool
 from example.tools.classification_tool import NewsClassificationTool
 from crewai.agents.agent_builder.base_agent import BaseAgent
 
 # Structured outputs
 from models.shared_state import (
-    CategorizerOutput,
-    ExpertOutput,
     FinalVerdictOutput
 )
 from crewai_tools import ScrapeWebsiteTool
@@ -37,31 +34,6 @@ class FakeNewsCrew():
     tasks_config="config/tasks.yaml"
     nlp_tool = NLPAnalysisTool()
     classification_tool = NewsClassificationTool()
-
-    # =====================================================
-    # AGENTS
-    # =====================================================
-
-    # @agent
-    # def categorizer_agent(self) -> Agent:
-    #     return Agent(
-    #         config=self.agents_config['categorizer_agent'],
-    #         verbose=True
-    #     )
-
-    # @agent
-    # def expert_agent(self) -> Agent:
-    #     return Agent(
-    #         config=self.agents_config['expert_agent'],
-    #         verbose=True
-    #     )
-
-    # @agent
-    # def conservative_judge(self) -> Agent:
-    #     return Agent(
-    #         config=self.agents_config['conservative_judge'],
-    #         verbose=True
-    #     )
 
     @agent
     def categorizer_agent(self) -> Agent:
@@ -129,13 +101,6 @@ class FakeNewsCrew():
             return Task(
                 config=self.tasks_config['evaluate_task'], # type: ignore[index]
             )
-        
-        # @task
-        # def expert_analysis_task(self) -> Task:
-        #     return Task(
-        #         config=self.tasks_config['expert_analysis_task'],
-        #         output_pydantic=ExpertOutput
-        #     )
     
 
     @task
@@ -174,10 +139,6 @@ class FakeNewsCrew():
                 config=self.tasks_config['decision_task'],
                 output_pydantic=FinalVerdictOutput, 
             )
-
-        # =====================================================
-        # CREW
-        # =====================================================
 
     @crew
     def crew(self) -> Crew:
